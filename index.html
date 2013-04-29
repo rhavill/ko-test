@@ -49,7 +49,7 @@
            <tbody  data-bind="foreach: cases"><tr>
              <td><input type="checkbox"></td>
              <td><input type="checkbox"></td>
-             <td><span data-toggle="tooltip" data-placement="top" title="" data-original-title="" class="consent-code"></span></td>
+             <td><span data-toggle="tooltip" data-placement="top" title="" data-original-title="" class="consent-code mac-or-sedation-consent"></span></td>
              <td data-bind="text: room"></td>
              <td data-bind="text: roomNumber"></td>
              <td data-bind="text: time"></td>
@@ -77,6 +77,46 @@
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script type="text/javascript" src="bootstrap/js/bootstrap.js"></script>
     <script type="text/javascript">
+    function Case(data) {
+        this.name = ko.observable(data.name);
+        this.done = ko.observable(data.done);
+        this.hasConsent = ko.observable(data.hasConsent);
+        this.room = ko.observable(data.room);
+        this.time = ko.observable(data.time);
+        this.roomNumber = ko.observable(data.roomNumber);
+        this.pre = ko.observable(data.pre);
+        this.post = ko.observable(data.post);
+        this.mrn = ko.observable(data.mrn);
+        this.procedure = ko.observable(data.procedure);
+        this.duration = ko.observable(data.duration);
+        this.surgeon = ko.observable(data.surgen);
+        this.anesthesia = ko.observable(data.anesthesia);
+        this.type = ko.observable(data.type);
+        this.caseNumber = ko.observable(data.caseNumber);
+        this.age = ko.observable(data.age);
+        this.consentGeneral = ko.observable(data.consentGeneral);
+        this.consentMac = ko.observable(data.consentMac);
+        this.consentConsciousSedation = ko.observable(data.consentConsciousSedation);
+        this.consentRegional = ko.observable(data.consentRegional);
+        this.consentSpinal = ko.observable(data.consentSpinal);
+        this.consentEpidural = ko.observable(data.consentEpidural);
+        this.noConsentReason = ko.observable(data.noConsentReason);
+        this.noConsentNotes = ko.observable(data.noConsentNotes);
+    }
+
+  function CaseListViewModel() {
+      // Data
+      var self = this;
+      self.cases = ko.observableArray([]);
+      // Load initial state from server, convert it to Case instances, then populate self.cases
+      $.getJSON("http://localhost:3000/cases", function(allData) {
+          var mappedCases = $.map(allData, function(item) { return new Case(item) });
+          self.cases(mappedCases);
+      }); 
+  }
+
+//ko.applyBindings(new TaskListViewModel());
+
     ko.applyBindings({
         cases: [
     {"name": "Anders, Ann",
